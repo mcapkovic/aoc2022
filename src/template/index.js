@@ -1,8 +1,6 @@
 import run from "aocrunner"
 
-const example1 = `A Y
-B X
-C Z`
+const example1 = ``
 
 const parseInput = (rawInput) => rawInput
 
