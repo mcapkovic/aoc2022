@@ -26,10 +26,10 @@ const part1 = (rawInput) => {
     const [elf2Start, elf2End] = elf2
     if (elf1Start <= elf2Start && elf1End >= elf2End) {
       console.log("elf1 range is inside elf2 range")
-      counter ++
+      counter++
     } else if (elf2Start <= elf1Start && elf2End >= elf1End) {
       console.log("elf2 range is inside elf1 range")
-      counter ++
+      counter++
     }
   })
 
@@ -55,6 +55,49 @@ const part2 = (rawInput) => {
   return overlapCount
 }
 
+const part2v1 = (rawInput) => {
+  const input = parseInput(rawInput)
+
+  let overlapCount = 0
+  input.forEach((elfPair) => {
+    const [elf1, elf2] = elfPair
+    const [elf1Start, elf1End] = elf1
+    const [elf2Start, elf2End] = elf2
+
+    const elf1Range = Array.from(
+      { length: elf1End - elf1Start + 1 },
+      (_, i) => i + elf1Start,
+    )
+
+    const intersection = elf1Range.filter(
+      (elf1Position) => elf2Start <= elf1Position && elf1Position <= elf2End,
+    )
+    if (intersection.length > 0) overlapCount++
+  })
+
+  return overlapCount
+}
+
+const part2v2 = (rawInput) => {
+  const input = parseInput(rawInput)
+
+  let overlapCount = 0
+  input.forEach((elfPair) => {
+    const [elf1, elf2] = elfPair
+    const [elf1Start, elf1End] = elf1
+    const [elf2Start, elf2End] = elf2
+
+    for(let elf1Position = elf1Start; elf1Position <= elf1End; elf1Position++) {
+      if ( elf1Position >= elf2Start && elf1Position <= elf2End) {
+        overlapCount++
+        break
+      }
+    }
+  })
+
+  return overlapCount
+}
+
 const part1Config = {
   tests: [
     {
@@ -72,7 +115,10 @@ const part2Config = {
       expected: 4,
     },
   ],
-  solution: part2,
+  // solution: part2,
+  // solution: part2v1,
+  solution: part2v2,
+
 }
 
 run({
