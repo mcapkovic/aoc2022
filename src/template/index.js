@@ -16,25 +16,29 @@ const part2 = (rawInput) => {
   return
 }
 
+const part1Config = {
+  tests: [
+    {
+      input: example1,
+      expected: "",
+    },
+  ],
+  solution: part1,
+}
+
+const part2Config = {
+  tests: [
+    {
+      input: example1,
+      expected: "",
+    },
+  ],
+  solution: part2,
+}
+
 run({
-  part1: {
-    tests: [
-      {
-        input: example1,
-        expected: "",
-      },
-    ],
-    solution: part1,
-  },
-  part2: {
-    tests: [
-      // {
-      //   input: example1,
-      //   expected: "",
-      // },
-    ],
-    solution: part2,
-  },
+  part1: part1Config,
+  // part2: part2Config,
   trimTestInputs: true,
   onlyTests: true,
   // onlyTests: false,
