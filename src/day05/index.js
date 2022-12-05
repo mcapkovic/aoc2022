@@ -10,31 +10,35 @@ move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2`
 
+const getStacks = (part) => {
+  const cratesLayout = part.slice(0, -1)
+  const noOfStacks = part[part.length - 1]
+    .split(" ")
+    .filter((word) => word !== "").length
+
+  const stacks = []
+  let cratesTowerIndex = 1
+
+  for (let stackNo = 0; stackNo < noOfStacks; stackNo++) {
+    const currentStack = cratesLayout
+      .map((cratesTowers) => cratesTowers[cratesTowerIndex]) // get stack letters
+      .filter((crate) => crate !== " ") // remove empty spaces
+      .reverse()  // reverse to get the order of the stack
+
+    stacks.push(currentStack)
+    cratesTowerIndex += 4
+  }
+  
+  return stacks
+}
+
 const parseInput = (rawInput) =>
   rawInput
     .split("\n\n")
     .map((part) => part.split("\n"))
     .map((part, index) => {
       if (index === 0) {
-        const cratesLayout = part.slice(0, -1)
-        const noOfStacks = part[part.length - 1]
-          .split(" ")
-          .filter((word) => word !== "").length
-
-        const stacks = []
-        let cratesTowerIndex = 1
-        
-        for (let stackNo = 0; stackNo < noOfStacks; stackNo++) {
-          const currentStack = cratesLayout
-            .map((cratesTowers) => cratesTowers[cratesTowerIndex]) // get stack letters
-            .filter((crate) => crate !== " ") // remove empty spaces
-            .reverse()  // reverse to get the order of the stack
-
-          stacks.push(currentStack)
-          cratesTowerIndex += 4
-        }
-        return stacks
-
+        return getStacks(part)
       } else {
         const instructions = part.map((row) =>
           row
