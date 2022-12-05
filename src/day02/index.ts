@@ -4,15 +4,20 @@ const example1 = `A Y
 B X
 C Z`
 
-const parseInput = (rawInput) => rawInput.split("\n").map((x) => x.split(" "))
+const parseInput = (rawInput: string): ["A" | "B" | "C", "X" | "Y" | "Z"][] =>
+  rawInput.split("\n").map((x) => x.split(" "))
 
-const normalizedShape = {
+const normalizedShape: {
+  X: "A"
+  Y: "B"
+  Z: "C"
+} = {
   X: "A",
   Y: "B",
   Z: "C",
 }
 
-const isSecondWinning = {
+const isSecondWinning: { [key: string]: boolean } = {
   AB: true,
   BC: true,
   CA: true,
@@ -37,8 +42,9 @@ const getPoints = {
  * 3 - draw
  * 6 - won
  */
-const part1 = (rawInput) => {
+const part1 = (rawInput: string) => {
   const input = parseInput(rawInput)
+  console.log(input)
   const scores = input.map((round) => {
     const [playerOneHand, playerTwoHandOriginal] = round
     const playerTwoHand = normalizedShape[playerTwoHandOriginal]
@@ -47,8 +53,7 @@ const part1 = (rawInput) => {
     if (playerOneHand === playerTwoHand) return 3 + shapePoints
 
     const key = `${playerOneHand}${playerTwoHand}`
-    if (isSecondWinning[key] === true)
-      return 6 + shapePoints
+    if (isSecondWinning[key] === true) return 6 + shapePoints
 
     return shapePoints
   })
@@ -60,22 +65,34 @@ const part1 = (rawInput) => {
   return score
 }
 
-const looseShape = {
+const looseShape: {
+  A: "C",
+  B: "A",
+  C: "B",
+} = {
   A: "C",
   B: "A",
   C: "B",
 }
 
-const winShape = {
+const winShape:{
+  A: "B",
+  B: "C",
+  C: "A",
+} = {
   A: "B",
   B: "C",
   C: "A",
 }
 
-function getSecondPlayerHand(playerOneHand, end) {
+function getSecondPlayerHand(
+  playerOneHand: "A" | "B" | "C",
+  end: "X" | "Y" | "Z",
+): "A" | "B" | "C" {
   if (end === "X") return looseShape[playerOneHand]
   if (end === "Y") return playerOneHand
-  if (end === "Z") return winShape[playerOneHand]
+  // if Z, then the second player will always win
+  return winShape[playerOneHand]
 }
 
 /**
@@ -87,7 +104,7 @@ function getSecondPlayerHand(playerOneHand, end) {
  * Y - draw
  * Z - win
  */
-const part2 = (rawInput) => {
+const part2 = (rawInput: string) => {
   const input = parseInput(rawInput)
   const scores = input.map((round) => {
     const [playerOneHand, end] = round
@@ -97,8 +114,7 @@ const part2 = (rawInput) => {
     if (playerOneHand === playerTwoHand) return 3 + shapePoints
 
     const key = `${playerOneHand}${playerTwoHand}`
-    if (isSecondWinning[key] === true)
-      return 6 + shapePoints
+    if (isSecondWinning[key] === true) return 6 + shapePoints
 
     return shapePoints
   })
