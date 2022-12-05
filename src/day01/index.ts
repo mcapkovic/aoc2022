@@ -16,11 +16,11 @@ const ex1 = `1000
 10000
 `
 
-const parseInput = (rawInput) => rawInput.split("\n").map((x) => Number(x))
+const parseInput = (rawInput: string) => rawInput.split("\n").map((x) => Number(x))
 
-const part1 = (rawInput) => {
+const part1 = (rawInput: string) => {
   const input = parseInput(rawInput)
-  const calories = []
+  const calories: number[] = []
   let elf = 0
 
   input.forEach((calory) => {
@@ -34,9 +34,9 @@ const part1 = (rawInput) => {
   return Math.max(...calories)
 }
 
-const part2 = (rawInput) => {
+const part2 = (rawInput: string) => {
   const input = parseInput(rawInput)
-  const calories = []
+  const calories: number[] = []
   let elfIndex = 0
 
   input.forEach((calory) => {

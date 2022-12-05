@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "aocrunner day",
-    "format": "prettier -w src"
+    "build": "aocrunner build",
+    "format": "prettier -w src",
+    "update:readme": "aocrunner update:readme"
   },
   "keywords": [
     "aoc"
@@ -14,8 +16,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^16.11.6",
-    "aocrunner": "^1.6.1",
-    "prettier": "^2.4.1"
+    "aocrunner": "^1.9.5",
+    "prettier": "^2.8.0"
   },
   "dependencies": {},
   "engines": {

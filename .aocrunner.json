@@ -1,20 +1,20 @@
 {
   "version": 1,
   "year": 2022,
-  "language": "js",
+  "language": "ts",
   "days": [
     {
       "part1": {
         "solved": true,
         "result": "74198",
         "attempts": [],
-        "time": 0.412541
+        "time": 0.470583
       },
       "part2": {
         "solved": true,
         "result": "209914",
         "attempts": [],
-        "time": 0.299
+        "time": 0.293916
       }
     },
     {
@@ -22,13 +22,13 @@
         "solved": true,
         "result": "15572",
         "attempts": [],
-        "time": 1.462917
+        "time": 1.5795
       },
       "part2": {
         "solved": true,
         "result": "16098",
         "attempts": [],
-        "time": 1.387833
+        "time": 1.330667
       }
     },
     {
@@ -64,13 +64,13 @@
         "solved": true,
         "result": "JRVNHHCSJ",
         "attempts": [],
-        "time": 0.831
+        "time": 1.05
       },
       "part2": {
         "solved": true,
         "result": "GNFBSBJLH",
         "attempts": [],
-        "time": 0.656208
+        "time": 0.754625
       }
     },
     {
