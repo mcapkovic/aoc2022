@@ -103,14 +103,6 @@ class Filesystem {
     }
   }
 
-  addNode(type, name, size) {
-    if (type === "dir") {
-      this.root.addDirectory(name)
-    } else {
-      this.root.addFile(name, size)
-    }
-  }
-
   getCurrentDir() {
     return this.currentDir
   }
