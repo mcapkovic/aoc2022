@@ -11,16 +11,8 @@ const parseInput = (rawInput) =>
 
 const part1 = (rawInput) => {
   const input = parseInput(rawInput)
-  const seen = Array.from({ length: input.length }, (v, rowIndex) =>
-    Array.from({ length: input[0].length }, (v, colIndex) => {
-      if (rowIndex === 0) return true
-      if (rowIndex === input.length - 1) return true
-      if (colIndex === 0) return true
-      if (colIndex === input[0].length - 1) return true
-      return false
-    }),
-  )
-
+  
+  let seenCount = input.length * 2 + input[0].length * 2 - 4
   for (let rowIndex = 1; rowIndex < input.length - 1; rowIndex++) {
     for (let colIndex = 1; colIndex < input[0].length - 1; colIndex++) {
       const current = input[rowIndex][colIndex]
@@ -38,7 +30,7 @@ const part1 = (rawInput) => {
           }
         }
         if (isSeeFromBottom) {
-          seen[rowIndex][colIndex] = true
+          seenCount++
           continue
         }
       }
@@ -52,7 +44,7 @@ const part1 = (rawInput) => {
           }
         }
         if (isSeeFromRight) {
-          seen[rowIndex][colIndex] = true
+          seenCount++
           continue
         }
       }
@@ -66,7 +58,7 @@ const part1 = (rawInput) => {
           }
         }
         if (isSeeFromTop) {
-          seen[rowIndex][colIndex] = true
+          seenCount++
           continue
         }
       }
@@ -80,19 +72,19 @@ const part1 = (rawInput) => {
           }
         }
         if (isSeeFromLeft) {
-          seen[rowIndex][colIndex] = true
+          seenCount++
           continue
         }
       }
     }
   }
 
-  let seenCount = 0
-  for (let rowIndex = 0; rowIndex < input.length; rowIndex++) {
-    for (let colIndex = 0; colIndex < input[0].length; colIndex++) {
-      if (seen[rowIndex][colIndex]) seenCount++
-    }
-  }
+  // let seenCount = 0
+  // for (let rowIndex = 0; rowIndex < input.length; rowIndex++) {
+  //   for (let colIndex = 0; colIndex < input[0].length; colIndex++) {
+  //     if (seen[rowIndex][colIndex]) seenCount++
+  //   }
+  // }
 
   return seenCount
 }
