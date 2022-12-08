@@ -11,7 +11,7 @@ const parseInput = (rawInput) =>
 
 const part1 = (rawInput) => {
   const input = parseInput(rawInput)
-  
+
   let seenCount = input.length * 2 + input[0].length * 2 - 4
   for (let rowIndex = 1; rowIndex < input.length - 1; rowIndex++) {
     for (let colIndex = 1; colIndex < input[0].length - 1; colIndex++) {
@@ -78,13 +78,6 @@ const part1 = (rawInput) => {
       }
     }
   }
-
-  // let seenCount = 0
-  // for (let rowIndex = 0; rowIndex < input.length; rowIndex++) {
-  //   for (let colIndex = 0; colIndex < input[0].length; colIndex++) {
-  //     if (seen[rowIndex][colIndex]) seenCount++
-  //   }
-  // }
 
   return seenCount
 }
