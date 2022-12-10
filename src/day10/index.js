@@ -162,9 +162,6 @@ const part1 = (rawInput) => {
 
   input.forEach((instruction) => {
     const [operation, value] = instruction
-
-    // console.log({ cycleCount, xValue, signalStrengthSum })
-
     if ((cycleCount - 20) % 40 === 0) signalStrengthSum += xValue * cycleCount
 
     if (operation === "addx") {
@@ -173,7 +170,6 @@ const part1 = (rawInput) => {
     }
 
     cycleCount += 1
-
     if (operation === "addx") {
       xValue += parseInt(value)
     }
@@ -218,6 +214,7 @@ const part2 = (rawInput) => {
     }
   })
 
+  // print pixels
   do {
     const row = pixels.splice(0, 40)
     console.log(row.join(""))
