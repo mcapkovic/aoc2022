@@ -182,73 +182,41 @@ const part1 = (rawInput) => {
   return signalStrengthSum
 }
 
+function isPixelActive(position, spriteCenter) {
+  const spriteLeft = spriteCenter - 1
+  const spriteRight = spriteCenter + 1
+  return (
+    spriteLeft === position ||
+    spriteRight === position ||
+    spriteCenter === position
+  )
+}
+
 const part2 = (rawInput) => {
   const input = parseInput(rawInput)
-  const screen = new Array(6).fill(0).map(() => new Array(40).fill("."))
-  const pixels = new Array(6 * 40).fill(".")
-  const pixels2 = []
+  const pixels = []
   let xValue = 1
   let cycleCount = 1
 
   input.forEach((instruction) => {
-    // if (cycleCount >= 15) return
     const [operation, value] = instruction
 
     if (operation === "addx") {
-      // console.log("cycleCount", cycleCount)
-      // console.log("xValue spriteCenter", xValue)
-      const row = Math.floor(cycleCount / 40)
-      const spriteLeft = xValue + row * 40 - 1
-      const spriteRight = xValue + row * 40 + 1
-      const spriteCenter = xValue + row * 40
-      if (
-        spriteLeft === cycleCount - 1 ||
-        spriteRight === cycleCount - 1 ||
-        spriteCenter === cycleCount - 1
-      ) {
-        pixels[cycleCount - 1] = "#"
-        pixels2.push("#")
-      } else {
-        pixels2.push(".")
-      }
-      // console.log({
-      //   cycleCount,
-      //   spriteCenter: xValue,
-      //   pixels: pixels2.join(""),
-      // })
+      const pixelValue = isPixelActive((cycleCount % 40) - 1, xValue)
+        ? "#"
+        : "."
+      pixels.push(pixelValue)
       cycleCount += 1
     }
-    // console.log(cycleCount)
 
-    const row = Math.floor(cycleCount / 40)
-    const spriteLeft = xValue + row * 40 - 1
-    const spriteRight = xValue + row * 40 + 1
-    const spriteCenter = xValue + row * 40
-    // console.log(row)
-    if (
-      spriteLeft === cycleCount - 1 ||
-      spriteRight === cycleCount - 1 ||
-      spriteCenter === cycleCount - 1
-    ) {
-      pixels[cycleCount - 1] = "#"
-      pixels2.push("#")
-    } else {
-      pixels2.push(".")
-    }
+    const pixelValue = isPixelActive((cycleCount % 40) - 1, xValue) ? "#" : "."
+    pixels.push(pixelValue)
+    cycleCount += 1
+
     if (operation === "addx") {
       xValue += parseInt(value)
     }
-
-    // console.log({ cycleCount, spriteCenter: xValue, pixels: pixels2.join("") })
-
-    cycleCount += 1
   })
-
-  // screen.forEach((row) => {
-  //   console.log(row.join(""))
-  // })
-
-  // console.log(pixels)
 
   do {
     const row = pixels.splice(0, 40)
@@ -279,7 +247,7 @@ const part2Config = {
 }
 
 run({
-  // part1: part1Config,
+  part1: part1Config,
   part2: part2Config,
   trimTestInputs: true,
   // onlyTests: true,
