@@ -86,11 +86,12 @@ const part1 = (rawInput) => {
 }
 
 
-// NOT WORKING!!!!
+// this will take a while
 const part2 = (rawInput) => {
   const input = parseInput(rawInput)
 
-  for (let round = 1; round <= 20; round++) {
+  for (let round = 1; round <= 10000; round++) {
+    if(round % 100 === 0) console.log(round)
     input.forEach((monkey) => {
       const { startingItems, operation, test, ifTrue, ifFalse } = monkey
       let [_, operator, operandString] = operation
@@ -107,8 +108,7 @@ const part2 = (rawInput) => {
           worryLevel = worryLevel + operand
         }
 
-        // console.log(worryLevel)
-        const newMonkeyIndex = worryLevel % BigInt(test) === 0 ? ifTrue : ifFalse
+        const newMonkeyIndex = worryLevel % BigInt(test) == 0 ? ifTrue : ifFalse
 
         input[newMonkeyIndex].startingItems.push(worryLevel)
         monkey.inspectedCount++
