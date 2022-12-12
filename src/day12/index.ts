@@ -12,8 +12,8 @@ const parseInput = (rawInput: string) =>
 const ELEVATIONS = "abcdefghijklmnopqrstuvwxyz"
 
 function getNumberOfSteps(
-  startPosition: [number, number] | undefined =[0, 0],
-  endPosition: [number, number]| undefined =[0, 0],
+  startPosition: [number, number] | undefined = [0, 0],
+  endPosition: [number, number] | undefined = [0, 0],
   input: string[][],
 ) {
   const queue = [startPosition]
