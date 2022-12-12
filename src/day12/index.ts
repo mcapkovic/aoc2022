@@ -6,29 +6,16 @@ accszExk
 acctuvwj
 abdefghi`
 
-const parseInput = (rawInput) =>
+const parseInput = (rawInput: string) =>
   rawInput.split("\n").map((line) => line.split(""))
 
 const ELEVATIONS = "abcdefghijklmnopqrstuvwxyz"
 
-const part1 = (rawInput) => {
-  const input = parseInput(rawInput)
-  let startPosition
-  let endPosition
-  for (let row = 0; row < input.length; row++) {
-    for (let col = 0; col < input[row].length; col++) {
-      if (startPosition && endPosition) break
-      if (input[row][col] === "S") {
-        startPosition = [row, col]
-        continue
-      }
-      if (input[row][col] === "E") {
-        endPosition = [row, col]
-        continue
-      }
-    }
-  }
-
+function getNumberOfSteps(
+  startPosition: [number, number] | undefined =[0, 0],
+  endPosition: [number, number]| undefined =[0, 0],
+  input: string[][],
+) {
   const queue = [startPosition]
   const visited = new Set()
   const distances = new Map()
@@ -36,7 +23,7 @@ const part1 = (rawInput) => {
   visited.add(`${startPosition[0]}-${startPosition[1]}`)
 
   while (queue.length > 0) {
-    const [row, col] = queue.shift()
+    const [row, col] = queue.shift() as [number, number]
     const currentDistance = distances.get(`${row}-${col}`)
     const currentElevation = ELEVATIONS.indexOf(input[row][col])
     const neighbors = [
@@ -68,10 +55,33 @@ const part1 = (rawInput) => {
   return distances.get(`${endPosition[0]}-${endPosition[1]}`)
 }
 
-const part2 = (rawInput) => {
+const part1 = (rawInput: string) => {
   const input = parseInput(rawInput)
-  let endPosition
-  let startingPositions = []
+  let startPosition: [number, number] | undefined
+  let endPosition: [number, number] | undefined
+
+  for (let row = 0; row < input.length; row++) {
+    for (let col = 0; col < input[row].length; col++) {
+      if (startPosition && endPosition) break
+      if (input[row][col] === "S") {
+        startPosition = [row, col]
+        continue
+      }
+      if (input[row][col] === "E") {
+        endPosition = [row, col]
+        continue
+      }
+    }
+  }
+
+  return getNumberOfSteps(startPosition, endPosition, input)
+}
+
+const part2 = (rawInput: string) => {
+  const input = parseInput(rawInput)
+  let startingPositions: [number, number][] = []
+  let endPosition: [number, number]
+
   for (let row = 0; row < input.length; row++) {
     for (let col = 0; col < input[row].length; col++) {
       if (input[row][col] === "S") {
@@ -90,47 +100,13 @@ const part2 = (rawInput) => {
   }
 
   const allDistances = startingPositions.map((startPosition) => {
-    const queue = [startPosition]
-    const visited = new Set()
-    const distances = new Map()
-    distances.set(`${startPosition[0]}-${startPosition[1]}`, 0)
-    visited.add(`${startPosition[0]}-${startPosition[1]}`)
-
-    while (queue.length > 0) {
-      const [row, col] = queue.shift()
-      const currentDistance = distances.get(`${row}-${col}`)
-      const currentElevation = ELEVATIONS.indexOf(input[row][col])
-      const neighbors = [
-        [row - 1, col],
-        [row + 1, col],
-        [row, col - 1],
-        [row, col + 1],
-      ]
-      neighbors.forEach(([neighborRow, neighborCol]) => {
-        if (
-          neighborRow < 0 ||
-          neighborRow >= input.length ||
-          neighborCol < 0 ||
-          neighborCol >= input[0].length
-        )
-          return
-        let elevationSymbol = input[neighborRow][neighborCol]
-        if (elevationSymbol === "E") elevationSymbol = "z"
-        const neighborElevation = ELEVATIONS.indexOf(elevationSymbol)
-        if (neighborElevation > currentElevation + 1) return
-
-        if (visited.has(`${neighborRow}-${neighborCol}`)) return
-        visited.add(`${neighborRow}-${neighborCol}`)
-        distances.set(`${neighborRow}-${neighborCol}`, currentDistance + 1)
-        queue.push([neighborRow, neighborCol])
-      })
-    }
-
-    const endPositionDistance = distances.get(
-      `${endPosition[0]}-${endPosition[1]}`,
+    const endPositionDistance = getNumberOfSteps(
+      startPosition,
+      endPosition,
+      input,
     )
-    if (!endPositionDistance) return Infinity
 
+    if (!endPositionDistance) return Infinity
     return endPositionDistance
   })
 
