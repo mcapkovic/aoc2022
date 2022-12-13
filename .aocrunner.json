@@ -188,13 +188,15 @@
           "4017",
           "11325"
         ],
-        "time": 1.699917
+        "time": 1.690875
       },
       "part2": {
-        "solved": false,
-        "result": null,
-        "attempts": [],
-        "time": null
+        "solved": true,
+        "result": "23958",
+        "attempts": [
+          "14762"
+        ],
+        "time": 1.331708
       }
     },
     {

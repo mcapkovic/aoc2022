@@ -59,6 +59,12 @@ const parseInput = (rawInput) =>
       rawRule.split("\n").map((item) => parseStringToArray(item)), // this is slower :( but it's more fun
   )
 
+const parseInput2 = (rawInput) =>
+  rawInput
+    .split("\n")
+    .filter((row) => row !== "")
+    .map((row) => JSON.parse(row))
+
 // compare two arrays of arrays
 // return true if left is smaller
 // return false if right is smaller
@@ -107,9 +113,29 @@ const part1 = (rawInput) => {
 }
 
 const part2 = (rawInput) => {
-  const input = parseInput(rawInput)
+  const input = parseInput2(rawInput)
+  input.push([[2]], [[6]])
+  input.sort((a, b) => {
+    const value = compareSites(a, b)
+    return value === true || value === null ? -1 : 1
+  })
 
-  return
+  const dividersIndices = []
+
+  for (let i = 1; i <= input.length; i++) {
+    if(dividersIndices.length === 2) break
+    const item = input[i]
+    if (item?.length > 1) continue
+    if(item?.[0]?.length > 1) continue
+    const value = item?.[0]?.[0]
+    if (value === 2) {
+      dividersIndices.push(i + 1)
+    } else if (value === 6) {
+      dividersIndices.push(i + 1)
+    }
+  }
+
+  return dividersIndices[0] * dividersIndices[1]
 }
 
 const part1Config = {
@@ -126,7 +152,7 @@ const part2Config = {
   tests: [
     {
       input: example1,
-      expected: "",
+      expected: 140,
     },
   ],
   solution: part2,
@@ -134,7 +160,7 @@ const part2Config = {
 
 run({
   part1: part1Config,
-  // part2: part2Config,
+  part2: part2Config,
   trimTestInputs: true,
   // onlyTests: true,
   onlyTests: false,
