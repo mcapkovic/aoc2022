@@ -11,6 +11,7 @@ const parseInput = (rawInput: string) =>
 
 const ELEVATIONS = "abcdefghijklmnopqrstuvwxyz"
 
+// BFS (Breadth First Search)
 function getNumberOfSteps(
   startPosition: [number, number] | undefined = [0, 0],
   endPosition: [number, number] | undefined = [0, 0],
