@@ -224,7 +224,7 @@
           "4208197",
           "4218196"
         ],
-        "time": 712.017583
+        "time": 708.2165
       },
       "part2": {
         "solved": false,
@@ -249,10 +249,10 @@
     },
     {
       "part1": {
-        "solved": false,
-        "result": null,
+        "solved": true,
+        "result": "3144",
         "attempts": [],
-        "time": null
+        "time": 10.29275
       },
       "part2": {
         "solved": false,
