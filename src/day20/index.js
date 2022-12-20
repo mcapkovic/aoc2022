@@ -18,14 +18,6 @@ class Node {
     this.prev = prev
     this.key = key
   }
-
-  getValue() {
-    return this.value
-  }
-
-  setNext(node) {
-    this.next = node
-  }
 }
 
 class CircularList {
@@ -77,35 +69,11 @@ class CircularList {
     this.length--
   }
 
-  // get(index) {
-  //   let node = this.head
-  //   let i = 0
-
-  //   while (i < index) {
-  //     node = node.next
-  //     i++
-  //   }
-
-  //   return node
-  // }
-
-  getNodeByValue(value) {
-    let node = this.head
-    let i = 0
-
-    while (node.value !== value) {
-      node = node.next
-      i++
-    }
-
-    return node
-  }
-
   getNodeByKey(key) {
     let node = this.head
     let i = 0
 
-    while (node.key !== key) {
+    while (node.key !== key && i < this.length) {
       node = node.next
       i++
     }
@@ -122,26 +90,8 @@ class CircularList {
       i++
     }
 
-    return node.getValue()
+    return node.value
   }
-
-  // insertAtPosition(value, position) {
-  //   const node = new Node(value)
-
-  //   if (position === 0) {
-  //     node.next = this.head
-  //     this.head = node
-  //     this.tail.next = this.head
-  //   } else {
-  //     const prev = this.get(position - 1)
-  //     const next = prev.next
-
-  //     prev.next = node
-  //     node.next = next
-  //   }
-
-  //   this.length++
-  // }
 
   indexOf(value) {
     let node = this.head
@@ -155,11 +105,11 @@ class CircularList {
     return i
   }
 
-  moveNodeBySteps(value, steps) {
+  moveNode(key, steps) {
     if (steps === 0) return
 
-    const node = this.getNodeByValue(value)
-    const nodeValue = node.getValue()
+    const node = this.getNodeByKey(key)
+    const nodeValue = node.value
     let pointer = node
     this.remove(node)
 
@@ -202,8 +152,7 @@ class CircularList {
 
     const values = []
     while (i < this.length) {
-      // console.log(node.getValue())
-      values.push(node.getValue())
+      values.push(node.value)
       node = node.next
       i++
     }
@@ -213,73 +162,19 @@ class CircularList {
 
 const part1 = (rawInput) => {
   const input = parseInput(rawInput)
-  // console.log(input)
-
   const list = new CircularList()
 
   input.forEach((value) => list.add(value))
-  input.forEach((value) => {
-    list.moveNodeBySteps(value, value)
+  input.forEach((value, index) => {
+    list.moveNode(index, value)
   })
 
-  // console.log("---")
-  // list.printValues()
-  // list.moveNodeBySteps(2, -1)
-  // console.log("---")
-  // list.printValues()
-
-  // for (let i = 0; i < input.length; i++) {
-  //   console.log(list.get(i).getValue())
-  //   // console.log(list.get(i))
-  // }
-
-  // for(let i = 0; i < input.length; i++) {
-  //   console.log(list.get(i).getValue())
-  //   // console.log(list.get(i))
-  // }
-
-  // console.log(list.indexOf(0))
-
-  // console.log('valueAtIndex2', valueAtIndex2)
-  // list.moveNodeBySteps(4, 1)
-  // console.log('---')
-  // for(let i = 0; i < input.length; i++) {
-  //   console.log(list.get(i).getValue())
-  //   // console.log(list.get(i))
-  // }
-
-  // console.log('head', list.head)
-
-  // list.moveNodeBySteps(2, 2)
-  // console.log('---')
-  // for(let i = 0; i < input.length; i++) {
-  //   console.log(list.get(i).getValue())
-  //   console.log(list.get(i))
-  // }
-
-  // list.moveNodeBySteps(-3, -3)
-  // console.log('---')
-  // for(let i = 0; i < input.length; i++) {
-  //   console.log(list.get(i).getValue())
-  //   // console.log(list.get(i))
-  // }
-
-  // const node = list.getNodeByValue(-3)
-  // list.remove(node)
-  // console.log('---', -3)
-
-  // list.insertAfter(node, 10)
-  // for(let i = 0; i < input.length; i++) {
-  //   console.log(list.get(i).getValue())
-  //   console.log(list.get(i))
-  // }
-
   const indexOfZero = list.indexOf(0)
-  const valueAtIndex1 = list.getValue((1000 + indexOfZero) % input.length)
-  const valueAtIndex2 = list.getValue((2000 + indexOfZero) % input.length)
-  const valueAtIndex3 = list.getValue((3000 + indexOfZero) % input.length)
-  console.log(valueAtIndex1, valueAtIndex2, valueAtIndex3)
-  return valueAtIndex1 + valueAtIndex2 + valueAtIndex3
+  const value1 = list.getValue((1000 + indexOfZero) % input.length)
+  const value2 = list.getValue((2000 + indexOfZero) % input.length)
+  const value3 = list.getValue((3000 + indexOfZero) % input.length)
+
+  return value1 + value2 + value3
 }
 
 const part2 = (rawInput) => {
