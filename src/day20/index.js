@@ -105,13 +105,15 @@ class CircularList {
     return i
   }
 
-  moveNode(key, steps) {
-    if (steps === 0) return
+  moveNode(key, allSteps) {
+    if (allSteps === 0) return
 
     const node = this.getNodeByKey(key)
     const nodeValue = node.value
     let pointer = node
     this.remove(node)
+
+    const steps = allSteps % this.length
 
     // move node by steps
     if (steps > 0) {
