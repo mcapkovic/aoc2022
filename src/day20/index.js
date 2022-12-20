@@ -12,10 +12,11 @@ const parseInput = (rawInput) => rawInput.split("\n").map(Number)
 
 // Circular doubly linked list
 class Node {
-  constructor(value, next = null, prev = null) {
+  constructor(value, key, next = null, prev = null) {
     this.value = value
     this.next = next
     this.prev = prev
+    this.key = key
   }
 
   getValue() {
@@ -34,8 +35,8 @@ class CircularList {
     this.length = 0
   }
 
-  add(value) {
-    const node = new Node(value)
+  add(value, index = this.length) {
+    const node = new Node(value, index)
 
     if (!this.head) {
       this.head = node
@@ -76,11 +77,23 @@ class CircularList {
     this.length--
   }
 
-  get(index) {
+  // get(index) {
+  //   let node = this.head
+  //   let i = 0
+
+  //   while (i < index) {
+  //     node = node.next
+  //     i++
+  //   }
+
+  //   return node
+  // }
+
+  getNodeByValue(value) {
     let node = this.head
     let i = 0
 
-    while (i < index) {
+    while (node.value !== value) {
       node = node.next
       i++
     }
@@ -88,11 +101,11 @@ class CircularList {
     return node
   }
 
-  getNodeByValue(value) {
+  getNodeByKey(key) {
     let node = this.head
     let i = 0
 
-    while (node.value !== value) {
+    while (node.key !== key) {
       node = node.next
       i++
     }
@@ -112,23 +125,23 @@ class CircularList {
     return node.getValue()
   }
 
-  insertAtPosition(value, position) {
-    const node = new Node(value)
+  // insertAtPosition(value, position) {
+  //   const node = new Node(value)
 
-    if (position === 0) {
-      node.next = this.head
-      this.head = node
-      this.tail.next = this.head
-    } else {
-      const prev = this.get(position - 1)
-      const next = prev.next
+  //   if (position === 0) {
+  //     node.next = this.head
+  //     this.head = node
+  //     this.tail.next = this.head
+  //   } else {
+  //     const prev = this.get(position - 1)
+  //     const next = prev.next
 
-      prev.next = node
-      node.next = next
-    }
+  //     prev.next = node
+  //     node.next = next
+  //   }
 
-    this.length++
-  }
+  //   this.length++
+  // }
 
   indexOf(value) {
     let node = this.head
@@ -142,12 +155,13 @@ class CircularList {
     return i
   }
 
-  // find node and move it by number of steps
   moveNodeBySteps(value, steps) {
     if (steps === 0) return
 
     const node = this.getNodeByValue(value)
+    const nodeValue = node.getValue()
     let pointer = node
+    this.remove(node)
 
     // move node by steps
     if (steps > 0) {
@@ -155,21 +169,21 @@ class CircularList {
       for (let i = 0; i < steps; i++) {
         pointer = pointer.next
       }
-      this.remove(node)
-      this.insertAfter(pointer, node.getValue())
+      this.insertAfter(pointer, nodeValue)
     } else {
       // move left
       for (let i = 0; i < Math.abs(steps); i++) {
         pointer = pointer.prev
       }
       pointer = pointer.prev
-      this.remove(node)
-      this.insertAfter(pointer, node.getValue())
+      this.insertAfter(pointer, nodeValue)
     }
   }
 
   insertAfter(node, value) {
     const newNode = new Node(value)
+    if (node.next.value === this.head.value) this.head = newNode
+    if (node.value === this.tail.value) this.tail = newNode
 
     const next = node.next
 
@@ -180,6 +194,20 @@ class CircularList {
     newNode.prev = node
 
     this.length++
+  }
+
+  printValues() {
+    let node = this.head
+    let i = 0
+
+    const values = []
+    while (i < this.length) {
+      // console.log(node.getValue())
+      values.push(node.getValue())
+      node = node.next
+      i++
+    }
+    console.log(values.join(", "))
   }
 }
 
@@ -194,11 +222,16 @@ const part1 = (rawInput) => {
     list.moveNodeBySteps(value, value)
   })
 
-  console.log("---")
-  for (let i = 0; i < input.length; i++) {
-    console.log(list.get(i).getValue())
-    // console.log(list.get(i))
-  }
+  // console.log("---")
+  // list.printValues()
+  // list.moveNodeBySteps(2, -1)
+  // console.log("---")
+  // list.printValues()
+
+  // for (let i = 0; i < input.length; i++) {
+  //   console.log(list.get(i).getValue())
+  //   // console.log(list.get(i))
+  // }
 
   // for(let i = 0; i < input.length; i++) {
   //   console.log(list.get(i).getValue())
@@ -207,14 +240,15 @@ const part1 = (rawInput) => {
 
   // console.log(list.indexOf(0))
 
-
   // console.log('valueAtIndex2', valueAtIndex2)
-  // list.moveNodeBySteps(1, 1)
+  // list.moveNodeBySteps(4, 1)
   // console.log('---')
   // for(let i = 0; i < input.length; i++) {
   //   console.log(list.get(i).getValue())
   //   // console.log(list.get(i))
   // }
+
+  // console.log('head', list.head)
 
   // list.moveNodeBySteps(2, 2)
   // console.log('---')
@@ -239,7 +273,6 @@ const part1 = (rawInput) => {
   //   console.log(list.get(i).getValue())
   //   console.log(list.get(i))
   // }
-
 
   const indexOfZero = list.indexOf(0)
   const valueAtIndex1 = list.getValue((1000 + indexOfZero) % input.length)
@@ -279,6 +312,6 @@ run({
   part1: part1Config,
   // part2: part2Config,
   trimTestInputs: true,
-  onlyTests: true,
-  // onlyTests: false,
+  // onlyTests: true,
+  onlyTests: false,
 })
