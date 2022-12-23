@@ -1,6 +1,5 @@
 import run from "aocrunner"
 
-//                0123456789
 const example1 = `        ...#
         .#..
         #...
@@ -16,11 +15,18 @@ const example1 = `        ...#
 
 10R5L5R10L4R5L5`
 
-const directionPoints ={
+const directionPoints = {
   right: 0,
   down: 1,
   left: 2,
   up: 3,
+}
+
+const directionIncrements = {
+  right: [0, 1],
+  down: [1, 0],
+  left: [0, -1],
+  up: [-1, 0],
 }
 
 const parseInput = (rawInput) =>
@@ -31,48 +37,30 @@ const parseInput = (rawInput) =>
     return rawSection
   })
 
-const move = ({ row, column, direction, tilesToMove, grid }) => {
-  console.log(" ----- moving", direction, tilesToMove)
-  console.log("starting at r/c", row, column)
+// wrap around the grid
+const getNextIndex = (nextIndexRaw, length) => {
+  if (nextIndexRaw < 0) return length - 1
+  return nextIndexRaw % length
+}
 
+const move = ({ row, column, direction, tilesToMove, grid }) => {
   let steps = parseInt(tilesToMove)
   let currentColumn = column
   let currentRow = row
   let lastValidRow = row
   let lastValidColumn = column
-  let columnIncrement = 0
-  let rowIncrement = 0
-
-  switch (direction) {
-    case "right":
-      columnIncrement = 1
-      break
-    case "down":
-      rowIncrement = 1
-      break
-    case "left":
-      columnIncrement = -1
-      break
-    case "up":
-      rowIncrement = -1
-      break
-  }
+  const [rowIncrement, columnIncrement] = directionIncrements[direction]
 
   let loopCount = 0
-  // for (let i = 0; i < steps; i++) {
   while (loopCount <= steps) {
-    let nextRowIndex = (currentRow + rowIncrement) % grid.length
-    let nextColumnIndex = (currentColumn + columnIncrement) % grid[0].length
-    if(nextColumnIndex < 0) nextColumnIndex = grid[0].length - 1
-    if(nextRowIndex < 0) nextRowIndex = grid.length - 1
+    let nextRowIndex = getNextIndex(currentRow + rowIncrement, grid.length)
+    let nextColumnIndex = getNextIndex(
+      currentColumn + columnIncrement,
+      grid[0].length,
+    )
 
     let nextTile = grid[nextRowIndex][nextColumnIndex]
     let currentTile = grid[currentRow][currentColumn]
-
-    console.log("currentTile", currentTile)
-
-    console.log("nextTile", nextTile)
-    console.log("nextTileIndex", nextRowIndex, nextColumnIndex)
 
     // if the position is valid, update the last valid position
     if (currentTile === ".") {
@@ -84,7 +72,7 @@ const move = ({ row, column, direction, tilesToMove, grid }) => {
     if (nextTile === "#") break
 
     // if we hit a space, position is invalid
-    if (nextTile == null || nextTile === ' ') steps++
+    if (nextTile == null || nextTile === " ") steps++
 
     // move to next tile
     currentColumn = nextColumnIndex
@@ -95,15 +83,24 @@ const move = ({ row, column, direction, tilesToMove, grid }) => {
   return [lastValidRow, lastValidColumn]
 }
 
-// A number indicates the number of tiles to move in the direction you are facing. If you run into a wall, you stop moving forward and continue with the next instruction.
-// A letter indicates whether to turn 90 degrees clockwise (R) or counterclockwise (L). Turning happens in-place; it does not change your current tile.
+const getDirection = (direction, instruction) => {
+  switch (direction) {
+    case "right":
+      return instruction === "R" ? "down" : "up"
+    case "down":
+      return instruction === "R" ? "left" : "right"
+    case "left":
+      return instruction === "R" ? "up" : "down"
+    case "up":
+      return instruction === "R" ? "right" : "left"
+  }
+}
+
 const part1 = (rawInput) => {
   const input = parseInput(rawInput)
-  // console.log(input)
 
   const grid = input[0]
   const instructions = input[1]
-  // const instructions = "4R1L3R1R3"
 
   let instructionPointer = 0
   let direction = "right"
@@ -113,46 +110,39 @@ const part1 = (rawInput) => {
 
   do {
     const instruction = instructions[instructionPointer]
-    if (isNaN(instruction)) {
-      // console.log('turning', instruction)
-      switch (direction) {
-        case "right":
-          direction = instruction === "R" ? "down" : "up"
-          break
-        case "down":
-          direction = instruction === "R" ? "left" : "right"
-          break
-        case "left":
-          direction = instruction === "R" ? "up" : "down"
-          break
-        case "up":
-          direction = instruction === "R" ? "right" : "left"
-          break
-      }
-    } else {
-      tilesToMove += instruction
-      const nextInstruction = instructions[instructionPointer + 1]
 
-      // if next instruction is not a number, we need to move
-      if (isNaN(nextInstruction)) {
-        const [row, column] = move({
-          row: currentRow,
-          column: currentColumn,
-          direction,
-          tilesToMove,
-          grid,
-        })
-        console.log('moving to', row, column)
-        currentRow = row
-        currentColumn = column
-        tilesToMove = ""
-      }
+    // if instruction is not a number, it's a direction
+    if (isNaN(instruction)) {
+      direction = getDirection(direction, instruction)
+      instructionPointer++
+      continue
     }
+
+    tilesToMove += instruction
+    const nextInstruction = instructions[instructionPointer + 1]
+
+    // if next instruction is not a number, we need to move
+    if (isNaN(nextInstruction)) {
+      const [row, column] = move({
+        row: currentRow,
+        column: currentColumn,
+        direction,
+        tilesToMove,
+        grid,
+      })
+      currentRow = row
+      currentColumn = column
+      tilesToMove = ""
+    }
+
     instructionPointer++
   } while (instructionPointer < instructions.length)
 
-  console.log(currentRow, currentColumn, direction)
-  return (currentRow + 1) * 1000 + (currentColumn + 1) * 4 + directionPoints[direction]
+  return (
+    (currentRow + 1) * 1000 +
+    (currentColumn + 1) * 4 +
+    directionPoints[direction]
+  )
 }
 
 const part2 = (rawInput) => {
