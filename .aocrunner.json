@@ -309,7 +309,7 @@
         "attempts": [
           "-13883044051218"
         ],
-        "time": 2002.569125
+        "time": 1877.094917
       }
     },
     {
@@ -334,7 +334,7 @@
           "156050",
           "119102"
         ],
-        "time": 1624.566917
+        "time": 3.538666
       },
       "part2": {
         "solved": false,
@@ -373,10 +373,12 @@
     },
     {
       "part1": {
-        "solved": false,
-        "result": null,
-        "attempts": [],
-        "time": null
+        "solved": true,
+        "result": "2----0=--1122=0=0021",
+        "attempts": [
+          "2----0=--1122=0=0021"
+        ],
+        "time": 0.174083
       },
       "part2": {
         "solved": false,
